@@ -1,5 +1,5 @@
 body {
-  padding: 50px;
+  padding: 100px;
   background: #1e1e2f;
   color: #ffffff;
 }
@@ -8,6 +8,7 @@ h1 {
   text-align: center;
   margin: 0 auto;
   padding: 10px;
+  font-size: 50px;
 }
 
 .converter {
@@ -17,12 +18,35 @@ h1 {
   border: 1px solid #ffffff;
   padding: 10px;
   gap: 10px;
-  max-width: 200px; 
+  width: 90%;
+  max-width: 500px;
   margin: 0 auto;
   background: #777b7c;
+}
+
+h2{
+  font-size: 30px;
+}
+
+#number {
+  color: #1e1e2f;
+  height: 50px;
+  font-size: 20px;
 }
 
 #convert-btn {
   background: #0dcaf0;
   color: #1e1e2f;
+  height: 50px;
+  font-size: 20px;
+}
+
+#output {
+  color: #ffffff;
+  height: 50px;
+  font-size: 50px;
+}
+
+#output:empty {
+  display: none;
 }
