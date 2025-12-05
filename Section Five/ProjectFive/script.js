@@ -1,102 +1,71 @@
-let price = 1.87;
-let cid = [
-  ['PENNY', 1.01],
-  ['NICKEL', 2.05],
-  ['DIME', 3.1],
-  ['QUARTER', 4.25],
-  ['ONE', 90],
-  ['FIVE', 55],
-  ['TEN', 20],
-  ['TWENTY', 60],
-  ['ONE HUNDRED', 100]
-];
+const input = document.getElementById("search-input");
+const searchButton = document.getElementById("search-button");
 
-const total = document.getElementById('total');
-const cash = document.getElementById('cash');
-const purchaseBtn = document.getElementById('purchase-btn');
-const cashInDrawer = document.getElementById('cash-in-drawer');
-const change = document.getElementById('change-due');
+const creatureName = document.getElementById("creature-name");
+const creatureId = document.getElementById("creature-id");
+const weight = document.getElementById("weight");
+const height = document.getElementById("height");
+const hp = document.getElementById("hp");
+const attack = document.getElementById("attack");
+const defense = document.getElementById("defense");
+const specialAttack = document.getElementById("special-attack");
+const specialDefense = document.getElementById("special-defense");
+const speed = document.getElementById("speed");
+const typesContainer = document.getElementById("types");
 
-total.innerText = `Total: $${price.toFixed(2)}`;
-drawerTotal(); 
+function getStat(creature, statName) {
+  const statObj = creature.stats.find(s => s.name === statName);
+  return statObj ? statObj.base_stat : 0;
+}
 
-purchaseBtn.addEventListener('click', () => {
-  const cashPaid = parseFloat(cash.value);
-  if (isNaN(cashPaid)) return alert("Please enter a valid number for cash.");
-  calculateChange(price, cashPaid);
-});
+function displaySingleCreature(creature) {
+  creatureName.textContent = creature.name.toUpperCase();
+  creatureId.textContent = `#${creature.id}`;
+  weight.textContent = `Weight: ${creature.weight}`;
+  height.textContent = `Height: ${creature.height}`;
+  hp.textContent = "HP: " + getStat(creature, "hp");
+  attack.textContent = "Attack: " + getStat(creature, "attack");
+  defense.textContent = "Defense: " + getStat(creature, "defense");
+  specialAttack.textContent = "Special-Attack: " + getStat(creature, "special-attack");
+  specialDefense.textContent = "Special-Defense: " + getStat(creature, "special-defense");
+  speed.textContent = "Speed: " + getStat(creature, "speed");
 
-function drawerTotal() {
-  cashInDrawer.innerHTML = "<h2>Change in drawer:</h2>";
-  cid.forEach(([name, amount]) => {
-    cashInDrawer.innerHTML += `<p>${name}: $${amount.toFixed(2)}</p>`;
+  typesContainer.innerHTML = "";
+  creature.types.forEach(t => {
+    const typeEl = document.createElement("p");
+    typeEl.textContent = t.name.toUpperCase();
+    typesContainer.appendChild(typeEl);
   });
 }
 
-function calculateChange(price, cashPaid) {
-  let changeDue = Math.round((cashPaid - price) * 100);
+searchButton.addEventListener("click", () => {
+  const term = input.value.trim();
 
-  if (changeDue < 0) {
-    alert("Customer does not have enough money to purchase the item");
+  if (!term) {
+    alert("Creature not found");
     return;
   }
 
-  if (Math.abs(changeDue) < 0.001) {
-    change.innerText = "No change due - customer paid with exact cash";
-    return;
-  }
-
-  const DENOMINATIONS = [
-    ['ONE HUNDRED', 10000],
-    ['TWENTY', 2000],
-    ['TEN', 1000],
-    ['FIVE', 500],
-    ['ONE', 100],
-    ['QUARTER', 25],
-    ['DIME', 10],
-    ['NICKEL', 5],
-    ['PENNY', 1]
-  ];
-
-  let drawer = {};
-  cid.forEach(([name, amount]) => drawer[name] = Math.round(amount * 100));
-
-  let changeArray = [];
-
-  for (let [name, value] of DENOMINATIONS) {
-    if (changeDue >= value && drawer[name] > 0) {
-      let amountFromDrawer = Math.min(Math.floor(changeDue / value) * value, drawer[name]);
-      if (amountFromDrawer > 0) {
-        changeArray.push([name, (amountFromDrawer / 100).toFixed(2)]);
-        changeDue -= amountFromDrawer;
-        drawer[name] -= amountFromDrawer;
-      }
-    }
-  }
-
-  const totalInDrawer = Object.values(drawer).reduce((sum, amt) => sum + amt, 0);
-  let status = '';
-  if (changeDue > 0) {
-    status = "INSUFFICIENT_FUNDS";
-    change.innerText = `Status: ${status}`;
-    return;
-  } else if (totalInDrawer === 0) {
-    status = "CLOSED";
-  } else {
-    status = "OPEN";
-  }
-
-  let displayText = `Status: ${status}`;
-  if (status === "OPEN" || status === "CLOSED") {
-    changeArray.forEach(([name, amount]) => {
-      displayText += ` ${name}: $${amount}`;
+  fetch(`https://rpg-creature-api.freecodecamp.rocks/api/creature/${term.toLowerCase()}`)
+    .then(res => {
+      if (!res.ok) throw new Error("Not found");
+      return res.json();
+    })
+    .then(data => {
+      displaySingleCreature(data);
+    })
+    .catch(() => {
+      alert("Creature not found");
+      creatureName.textContent = "";
+      creatureId.textContent = "";
+      weight.textContent = "";
+      height.textContent = "";
+      hp.textContent = "";
+      attack.textContent = "";
+      defense.textContent = "";
+      specialAttack.textContent = "";
+      specialDefense.textContent = "";
+      speed.textContent = "";
+      typesContainer.innerHTML = "";
     });
-  }
-  change.innerText = displayText;
-  cashInDrawer.innerHTML = "<h2>Change in drawer:</h2>";
-  Object.keys(drawer).forEach(name => {
-    cashInDrawer.innerHTML += `<p>${name}: $${(drawer[name]/100).toFixed(2)}</p>`;
-  });
-
-  cid = Object.entries(drawer).map(([name, amount]) => [name, amount / 100]);
-}
+});

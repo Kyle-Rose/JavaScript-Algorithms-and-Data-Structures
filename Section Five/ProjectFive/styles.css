@@ -1,89 +1,117 @@
-body {
-  font-family: Arial, sans-serif;
-  background: #f5f5f5;
+* {
   margin: 0;
-  padding: 20px 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+body {
+  background-color: #1e1e2f;
+  color: #ffffff;
   display: flex;
   justify-content: center;
+  align-items: flex-start;
+  min-height: 100vh;
+  padding: 20px;
 }
 
 main {
-  background: #ffffff;
-  padding: 25px 30px;
-  border-radius: 10px;
-  box-shadow: 0 4px 12px rgba(0,0,0,0.1);
-  width: 380px;
+  width: 100%;
+  max-width: 800px;
+  background-color: #2b2b3f;
+  padding: 20px;
+  border-radius: 12px;
+  box-shadow: 0 5px 15px rgba(0,0,0,0.5);
 }
 
-h1, h2 {
+h1 {
   text-align: center;
-  margin-top: 0;
-  color: #222;
+  margin-bottom: 20px;
+  color: #ffd700;
+  text-shadow: 1px 1px 2px #000;
 }
 
-#total {
-  background: #eef2ff;
-  padding: 12px;
-  margin-top: 15px;
-  border-left: 5px solid #3a82ff;
-  border-radius: 5px;
+#input-div {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin-bottom: 20px;
+}
+
+#input-div label {
   font-weight: bold;
+  font-size: 1rem;
 }
 
-.cash-input {
-  display: block;
-  margin-top: 12px;
-  width: 100%;
-  font-weight: bold;
-}
-
-#cash {
+#search-input {
   padding: 10px;
-  font-size: 16px;
-  border: 1px solid #bbb;
-  border-radius: 5px;
-  width: 100%;
-  box-sizing: border-box;
-  margin-top: 10px;
-}
-
-#purchase-btn {
-  padding: 12px;
-  margin-top: 10px;
-  font-size: 16px;
-  border: none;
-  background: #3a82ff;
-  color: white;
-  border-radius: 5px;
-  cursor: pointer;
-  width: 100%;
-}
-
-#change-due {
-  background: #e7f8ec;
-  padding: 12px;
-  margin-top: 15px;
-  border-left: 5px solid #2bb673;
-  border-radius: 5px;
-  min-height: 20px;
-}
-
-#cash-in-drawer {
-  background: #fafafa;
-  padding: 15px;
-  margin-top: 20px;
   border-radius: 8px;
-  border: 1px solid #ddd;
+  border: none;
+  font-size: 1rem;
 }
 
-#cash-in-drawer p {
-  margin: 6px 0;
-  font-size: 15px;
+#search-button {
+  margin-top: 10px;
+  padding: 10px;
+  background-color: #6a0dad;
+  border: none;
+  border-radius: 8px;
+  color: white;
+  font-weight: bold;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
 }
 
-@media (max-width: 480px) {
-  main {
-    width: 90%;
-    padding: 20px;
+#search-button:hover {
+  background-color: #9b30ff;
+}
+
+#creature-div, #attributes-div {
+  background-color: #3a3a55;
+  padding: 15px;
+  border-radius: 10px;
+  margin-bottom: 20px;
+}
+
+#creature-div p, #attributes-div p {
+  margin: 8px 0;
+  font-size: 1rem;
+}
+
+.purple-divider {
+  height: 2px;
+  background: #9b30ff;
+  margin: 10px 0;
+  border-radius: 1px;
+}
+
+#types p {
+  display: inline-block;
+  background-color: #6a0dad;
+  padding: 5px 10px;
+  margin-right: 5px;
+  margin-bottom: 5px;
+  border-radius: 5px;
+  font-weight: bold;
+  font-size: 0.9rem;
+}
+
+#attributes-div p {
+  font-weight: bold;
+}
+
+.error-msg {
+  color: #ff4c4c;
+  font-weight: bold;
+  text-align: center;
+}
+
+@media (max-width: 500px) {
+  #input-div {
+    width: 100%;
+  }
+
+  #search-button {
+    width: 100%;
   }
 }
