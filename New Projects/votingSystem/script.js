@@ -1,68 +1,47 @@
-class BankAccount {
-  constructor() {
-    this.balance = 0;
-    this.transactions = [];
+let poll = new Map();
+
+function addOption(option) {
+  if (!option || option.trim() === "") {
+    return "Option cannot be empty.";
   }
-
-  deposit(amount) {
-    if (amount <= 0) {
-      return "Deposit amount must be greater than zero.";
-    }
-    this.balance += amount;
-    this.transactions.push({
-      type: "deposit",
-      amount: amount
-    });
-
-    return `Successfully deposited $${amount}. New balance: $${this.balance}`;
+  if (poll.has(option)) {
+    return `Option "${option}" already exists.`;
   }
-
-  withdraw(amount){
-      if (amount <= 0 | amount >= this.balance) {
-      return "Insufficient balance or invalid amount.";
-    }
-    this.balance -= amount;
-    this.transactions.push({
-      type: "withdraw",
-      amount: amount
-    });
-
-    return `Successfully withdrew $${amount}. New balance: $${this.balance}`;
-  }
-
-  checkBalance(){
-    return `Current balance: $${this.balance}`
-  }
-
-  listAllDeposits() {
-    const deposits = [];
-    for (let i = 0; i < this.transactions.length; i++) {
-      if (this.transactions[i].type === "deposit") {
-        deposits.push(this.transactions[i].amount);
-      }
-    }
-    return `Deposits: ${deposits}`;
-  }
-
-  listAllWithdrawals() {
-    const withdrawals = [];
-    for (let i = 0; i < this.transactions.length; i++) {
-      if (this.transactions[i].type === "withdraw") {
-        withdrawals.push(this.transactions[i].amount);
-      }
-    }
-    return `Withdrawals: ${withdrawals}`;
-  }
-
+  poll.set(option, new Set());
+  return `Option "${option}" added to the poll.`;
 }
 
-const myAccount = new BankAccount();
-console.log(myAccount.deposit(100));
-console.log(myAccount.deposit(100));
-console.log(myAccount.deposit(100));
-console.log(myAccount.deposit(100));
-console.log(myAccount.deposit(100));
-console.log(myAccount.withdraw(100));
-console.log(myAccount.withdraw(100));
-console.log(myAccount.checkBalance())
-console.log(myAccount.listAllDeposits());
+function vote(option, voterId) {
+  if (!poll.has(option)) {
+    return `Option "${option}" does not exist.`;
+  }
+
+  let voters = poll.get(option);
+  if (voters.has(voterId)) {
+    return `Voter ${voterId} has already voted for "${option}".`;
+  }
+
+  voters.add(voterId);
+  poll.set(option, voters);
+  return `Voter ${voterId} voted for "${option}".`;
+}
+
+function displayResults() {
+  let results = ["Poll Results:"];
+  for (let [option, voters] of poll) {
+    results.push(`${option}: ${voters.size} votes`);
+  }
+  return results.join("\n");
+}
+
+console.log(addOption("Option 1"));
+console.log(addOption("Option 2"));
+console.log(addOption("Option 3"));
+
+console.log(vote("Option 1", "user1"));
+console.log(vote("Option 2", "user2"));
+console.log(vote("Option 1", "user3"));
+console.log(vote("Option 3", "user4"));
+console.log(vote("Option 1", "user1"));
+
+console.log(displayResults());
