@@ -9,7 +9,11 @@
 /coverage
 
 # production
+# Ignore everything
+/*
 
+# But do not ignore the build folder
+!/build
 
 # misc
 .DS_Store
