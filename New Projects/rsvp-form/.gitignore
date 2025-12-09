@@ -1,0 +1,8 @@
+# Ignore everything
+/*
+
+# But keep the build folder
+!/build
+
+# Ignore gitignore itself
+!.gitignore
