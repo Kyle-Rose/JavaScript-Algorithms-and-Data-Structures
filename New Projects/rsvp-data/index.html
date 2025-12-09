@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>RSVP List</title>
+</head>
+<body>
+  <h2>RSVPs</h2>
+  <ul id="rsvp-list"></ul>
+
+  <!-- Firebase SDK -->
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/9.23.0/firebase-app.js";
+    import { getFirestore, collection, getDocs } from "https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore.js";
+
+    // Your Firebase config
+const firebaseConfig = {
+  apiKey: "AIzaSyBx4pZbLgvY-dmsCw9Ip7XwxomPgK4abaw",
+  authDomain: "event-rsvp-11a40.firebaseapp.com",
+  projectId: "event-rsvp-11a40",
+  storageBucket: "event-rsvp-11a40.firebasestorage.app",
+  messagingSenderId: "1041837092810",
+  appId: "1:1041837092810:web:589e9bdd66c557400fe933"
+};
+
+    // Initialize Firebase
+    const app = initializeApp(firebaseConfig);
+    const db = getFirestore(app);
+
+    const rsvpList = document.getElementById("rsvp-list");
+
+    async function fetchRSVPs() {
+      const querySnapshot = await getDocs(collection(db, "rsvps"));
+
+      querySnapshot.forEach((doc) => {
+        const data = doc.data();
+        const li = document.createElement("li");
+        li.textContent = `${data.name} (${data.email}) - ${data.numberOfAttendees} attendees, Diet: ${data.diet}, Guests: ${data.guests ? 'Yes' : 'No'}`;
+        rsvpList.appendChild(li);
+      });
+    }
+
+    fetchRSVPs();
+  </script>
+</body>
+</html>
